@@ -162,22 +162,3 @@ WHERE rank_ <= 3;
     
 -- Question 14. Average time between sessions for each charger for each month (consider the month of start_time)
 
-SELECT 
-    charger_id, 
-    month, 
-    AVG(time_between_sessions) AS avg_time_between_sessions
-FROM (
-    SELECT 
-        charger_id, 
-        YEAR(start_time) AS year, 
-        MONTH(start_time) AS month,
-        TIMESTAMPDIFF(MINUTE, start_time, LEAD(start_time) OVER (PARTITION BY charger_id ORDER BY start_time)) AS time_between_sessions
-    FROM 
-        sessions
-) AS session_differences
-WHERE 
-    time_between_sessions IS NOT NULL
-GROUP BY 
-    charger_id, 
-    year, 
-    month;
